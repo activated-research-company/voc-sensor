@@ -1,0 +1,11 @@
+version: '2'
+volumes:
+  data:
+services:
+  sensor:
+    build: sensor
+    volumes:
+      - 'data:/data'
+    ports:
+      - '3000'
+    network_mode: host
