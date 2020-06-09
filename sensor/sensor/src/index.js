@@ -24,7 +24,8 @@ const parseData = (data) => {
 SerialPort
   .list()
   .then((ports) => {
-    if (portsAreValid(ports)) { return ports[0]; }
+    const filteredPorts = ports.filter((port) => port.path !== '/dev/ttyAMA0');
+    if (portsAreValid(filteredPorts)) { return filteredPorts[0]; }
   })
   .then((port) => {
     const vocSensor = new SerialPort(port.path, {
