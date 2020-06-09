@@ -1,11 +1,13 @@
 const SerialPort = require('serialport');
 const Delimiter = require('@serialport/parser-delimiter');
 
-const TOO_MANY_PORTS = 'Only one serial port can be active at a time.';
+const throwTooManyPortsError = (numberOfPorts) => {
+  throw new Error(`Only one serial port can be active at a time. There are currently ${numberOfPorts} active ports.`);
+}
 
 const portsAreValid = (ports) => {
   if (ports.length > 1) {
-    console.error(TOO_MANY_PORTS);
+    throwTooManyPortsError(ports.length);
     return false;
   }
   return true;
@@ -22,8 +24,7 @@ const parseData = (data) => {
 SerialPort
   .list()
   .then((ports) => {
-    if (!portsAreValid(ports)) { return; }
-    return ports[0];
+    if (portsAreValid(ports)) { return ports[0]; }
   })
   .then((port) => {
     const vocSensor = new SerialPort(port.path, {
@@ -45,4 +46,7 @@ SerialPort
     });
 
     vocSensor.open();
-  });
+  })
+  .catch((error) => {
+    console.error(error);
+  });y;
