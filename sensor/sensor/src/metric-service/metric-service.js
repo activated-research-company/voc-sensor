@@ -30,7 +30,7 @@ function metricService() {
     influx.writePoints(
       [
         {
-          measurement: 'voc',
+          measurement: 'sensor',
           tags: {
             accuracy,
           },
@@ -44,7 +44,7 @@ function metricService() {
         },
       ],
       {
-        database: 'sensor',
+        database: 'voc',
         precision: 's',
       },
     )
