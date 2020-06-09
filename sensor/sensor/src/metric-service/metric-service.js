@@ -49,7 +49,7 @@ function metricService() {
       },
     )
     .catch(error => {
-      console.error(`Error saving data to InfluxDB! ${err.stack}`)
+      console.error(`Error saving data to InfluxDB! ${error.stack}`)
     });;
   }
   
