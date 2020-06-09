@@ -1,5 +1,6 @@
 const SerialPort = require('serialport');
 const Delimiter = require('@serialport/parser-delimiter');
+const metricService = require('./metric-service/metric-service');
 
 const throwTooManyPortsError = (numberOfPorts) => {
   throw new Error(`Only one serial port can be active at a time. There are currently ${numberOfPorts} active ports.`);
@@ -37,7 +38,15 @@ SerialPort
     parser.on('data', (data) => {
       if (!isConfigurationResponse(data)) {
         try {
-          console.log(parseData(data));
+          const json = parseData(data);
+          metricService.add(
+            json.iaqAccuracy,
+            json.temperature,
+            json.pressure,
+            json.humidity,
+            json.gasResistance,
+            json.IAQ,
+          );
         } catch (error) {
           console.error(`I could not parse voc json: ${error} w/ ${data.toString()}`);
           console.warn('I\'m going to try reconfigure the sensor for json output.');
