@@ -49,4 +49,4 @@ SerialPort
   })
   .catch((error) => {
     console.error(error);
-  });y;
+  });
